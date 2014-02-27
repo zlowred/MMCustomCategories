@@ -97,6 +97,23 @@ static id<CoreDataErrorHandler> errorHandler;
     [NSManagedObject handleError:error];
     return results;
 }
+
++ (NSArray *)findAllSortedBy:(NSArray *)sortDescriptors withPredicate:(NSPredicate *)predicate inContext:(NSManagedObjectContext *)context {
+    NSEntityDescription *entity = [self entityDescriptionInContext:context];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:entity];
+    if (predicate) {
+        [request setPredicate:predicate];
+    }
+    if (sortDescriptors) {
+        [request setSortDescriptors:sortDescriptors];
+    }
+    NSError *error = nil;
+    NSArray *results = [context executeFetchRequest:request error:&error];
+    [NSManagedObject handleError:error];
+    return results;
+}
+
 + (NSArray *)findAllSortedBy:(NSString*)sortField ascending:(bool)ascending withPredicate: (NSPredicate *)predicate andLimit: (int) limit inContext:(NSManagedObjectContext *)context {
     NSEntityDescription *entity = [self entityDescriptionInContext:context];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
